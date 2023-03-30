@@ -1,3 +1,4 @@
+const { describe } = require('yargs');
 const Calculator = require('./calculator');
 
 describe('Calculator', () => {
@@ -67,6 +68,11 @@ describe('Calculator', () => {
       expect(calculator.divide(3, 0)).toBe(Infinity);
     });
   });
+
+  test('adds 1 + 2 to equal 3', () => {
+    expect(1 + 2).toBe(3);
+  });
+
 });
 
 /* Comment: 
