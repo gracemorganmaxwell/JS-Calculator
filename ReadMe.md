@@ -1,7 +1,8 @@
+# JS-Calculator
 
-# Calculator 
-
-Welcome to the Calculator project! This project is a simple calculator that can perform basic arithmetic operations like addition, subtraction, multiplication, and addition. 
+Welcome to the Calculator project! 
+This project is a simple calculator that can perform basic arithmetic operations like addition, subtraction, multiplication, and addition. 
+I first created this Calculator project back in 2021. I've come back to it and given it a spruce-up by making the JS code more tider and adding in Jest Unit Testing. 
 
 # How to use the Calculator
 
@@ -23,3 +24,4 @@ To run the tests, follow these steps:
 4. Run the command `npm test` to run the tests. 
 
 Thank you for using my Calculator project. We hope it helps you with your arithmetic calculations. 
+
