@@ -1,19 +1,16 @@
-// Function to add two numbers
+// Functions for arithmetic operations
 function add(a, b) {
   return a + b;
 }
 
-// Function to subtract two numbers
 function subtract(a, b) {
   return a - b;
 }
 
-// Function to multiply two numbers
 function multiply(a, b) {
   return a * b;
 }
 
-// Function to divide two numbers
 function divide(a, b) {
   if (b === 0) {
     return "Cannot divide by zero";
@@ -22,28 +19,48 @@ function divide(a, b) {
   }
 }
 
-// Prompt the user to enter the first number
-const num1 = parseFloat(prompt("Enter the first number:"));
+// Select DOM elements
+const calculatorInput = document.querySelector('.calculator-input');
+const calculatorOutput = document.querySelector('.calculator-output');
+const numberButtons = document.querySelectorAll('[data-number]');
+const operatorButtons = document.querySelectorAll('.operator');
+const clearButton = document.querySelector('[data-action="clear"]');
+const delButton = document.querySelector('.del');
+const equalsButton = document.querySelector('.equal-sign');
 
-// Prompt the user to enter the second number
-const num2 = parseFloat(prompt("Enter the second number:"));
+// Add event listeners to number buttons
+numberButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    calculatorInput.textContent += button.textContent;
+  });
+});
 
-// Prompt the user to choose an operation
-const operation = prompt("Choose an operation (+, -, *, /):");
+// Add event listeners to operator buttons
+operatorButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    calculatorInput.textContent += button.textContent;
+  });
+});
 
-// Perform the selected operation
-let result;
-if (operation === "+") {
-  result = add(num1, num2);
-} else if (operation === "-") {
-  result = subtract(num1, num2);
-} else if (operation === "*") {
-  result = multiply(num1, num2);
-} else if (operation === "/") {
-  result = divide(num1, num2);
-} else {
-  result = "Invalid operation";
-}
+// Add event listener to clear button
+clearButton.addEventListener('click', () => {
+  calculatorInput.textContent = '';
+  calculatorOutput.textContent = '';
+});
 
-// Display the result
-alert("The result is " + result);
+// Add event listener to delete button
+delButton.addEventListener('click', () => {
+  calculatorInput.textContent = calculatorInput.textContent.slice(0, -1);
+});
+
+// Add event listener to equals button
+equalsButton.addEventListener('click', () => {
+  const input = calculatorInput.textContent;
+  const expression = input.replace(/×/g, '*').replace(/÷/g, '/');
+  try {
+    const result = eval(expression);
+    calculatorOutput.textContent = result;
+  } catch (e) {
+    calculatorOutput.textContent = 'Invalid expression';
+  }
+});
