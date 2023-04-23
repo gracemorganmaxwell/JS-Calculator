@@ -1,4 +1,5 @@
 /** @format */
+
 class Calculator {
 	constructor() {
 		this.calculatorKeys = document.querySelector(".calculator-keys");
@@ -17,9 +18,12 @@ class Calculator {
 	}
 
 	appendNumber(number) {
-		if (this.calculatorScreen.textContent === "0" || this.shouldResetScreen)
-			this.resetScreen();
-		this.calculatorScreen.textContent += number;
+		if (this.shouldResetScreen || this.calculatorScreen.textContent === "0") {
+			this.calculatorScreen.textContent = number;
+			this.shouldResetScreen = false;
+		} else {
+			this.calculatorScreen.textContent += number;
+		}
 	}
 
 	resetScreen() {
@@ -36,14 +40,18 @@ class Calculator {
 	}
 
 	handleOperator(operator) {
-		if (this.currentOperator !== null) this.calculate();
+		if (this.currentOperator !== null) {
+			this.calculate();
+		}
 		this.firstOperand = this.calculatorScreen.textContent;
 		this.currentOperator = operator;
 		this.shouldResetScreen = true;
 	}
 
 	calculate() {
-		if (this.currentOperator === null || this.shouldResetScreen) return;
+		if (this.currentOperator === null || this.shouldResetScreen) {
+			return;
+		}
 		this.secondOperand = this.calculatorScreen.textContent;
 		let result;
 
@@ -64,17 +72,25 @@ class Calculator {
 				return;
 		}
 
+		console.log(`firstOperand: ${this.firstOperand}`);
+		console.log(`secondOperand: ${this.secondOperand}`);
+		console.log(`result: ${result}`);
+
 		this.calculatorScreen.textContent = result;
 		this.innerCalculatorScreen.textContent = `${this.firstOperand} ${this.currentOperator} ${this.secondOperand} = ${result}`;
 		this.currentOperator = null;
 		this.shouldResetScreen = true;
+
+		return result;
 	}
 
 	handleButtonClick(e) {
 		const target = e.target;
 		const action = target.dataset.action;
 
-		if (!target.matches("button")) return;
+		if (!target.matches("button")) {
+			return;
+		}
 
 		switch (action) {
 			case "number":
@@ -84,9 +100,12 @@ class Calculator {
 				this.handleOperator(target.textContent);
 				break;
 			case "decimal":
-				if (this.shouldResetScreen) this.resetScreen();
-				if (!this.calculatorScreen.textContent.includes("."))
+				if (this.shouldResetScreen) {
+					this.resetScreen();
+				}
+				if (!this.calculatorScreen.textContent.includes(".")) {
 					this.calculatorScreen.textContent += ".";
+				}
 				break;
 			case "clear":
 				this.clearAll();
@@ -98,5 +117,4 @@ class Calculator {
 	}
 }
 
-const calculator = new Calculator();
 module.exports = Calculator;

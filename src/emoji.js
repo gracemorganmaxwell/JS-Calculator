@@ -1,5 +1,5 @@
 /** @format */
-//emjoi random generating function
+
 const emojis = [
 	"🚀",
 	"🌠",
@@ -17,9 +17,7 @@ const emojis = [
 	"☄️",
 ];
 
-const emojiContainer = document.getElementById("emoji-container");
-
-function generateRandomEmoji() {
+function generateRandomEmoji(emojiContainer) {
 	const emojiElement = document.createElement("div");
 	const randomEmojiIndex = Math.floor(Math.random() * emojis.length);
 	const randomX = Math.random() * 100;
@@ -37,12 +35,18 @@ function generateRandomEmoji() {
 	}, randomDuration * 1000);
 }
 
-function generateEmojisContinuously() {
-	generateRandomEmoji();
-	setTimeout(generateEmojisContinuously, Math.random() * 2000 + 1000);
+function generateEmojisContinuously(emojiContainer) {
+	generateRandomEmoji(emojiContainer);
+	setTimeout(
+		() => generateEmojisContinuously(emojiContainer),
+		Math.random() * 2000 + 1000
+	);
 }
 
-generateEmojisContinuously();
+document.addEventListener("DOMContentLoaded", () => {
+	const emojiContainer = document.getElementById("emoji-container");
+	generateEmojisContinuously(emojiContainer);
+});
 
 module.exports = {
 	generateRandomEmoji,

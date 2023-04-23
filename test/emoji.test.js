@@ -1,4 +1,10 @@
 /** @format */
+
+const {
+	generateRandomEmoji,
+	generateEmojisContinuously,
+} = require("../src/emoji");
+
 global.document = {
 	querySelector: () => ({
 		appendChild: () => {},
@@ -14,11 +20,6 @@ beforeAll(() => {
 	});
 });
 
-const {
-	generateRandomEmoji,
-	generateEmojisContinuously,
-} = require("../src/emoji");
-
 const createElementMock = jest.fn(() => ({
 	style: {},
 }));
@@ -28,7 +29,6 @@ const querySelectorMock = jest.fn(() => ({
 	removeChild: jest.fn(),
 }));
 
-global.document.createElement = createElementMock;
 global.document.querySelector = querySelectorMock;
 
 describe("generateRandomEmoji", () => {
