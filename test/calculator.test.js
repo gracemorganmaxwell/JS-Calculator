@@ -1,7 +1,20 @@
 /** @format */
-global.document.querySelector = () => ({
-	addEventListener: jest.fn(),
-});
+global.document.querySelector = (selector) => {
+	switch (selector) {
+		case ".calculator-screen":
+			return {
+				textContent: "",
+			};
+		case ".inner-calculator-screen":
+			return {
+				textContent: "",
+			};
+		default:
+			return {
+				addEventListener: jest.fn(),
+			};
+	}
+};
 
 const Calculator = require("../src/Calculator");
 
