@@ -1,4 +1,7 @@
 /** @format */
+global.document.querySelector = () => ({
+	addEventListener: jest.fn(),
+});
 
 const Calculator = require("../src/calculator");
 

@@ -1,93 +1,102 @@
 /** @format */
-const calculatorKeys = document.querySelector(".calculator-keys");
-const calculatorScreen = document.querySelector(".calculator-screen");
-const innerCalculatorScreen = document.querySelector(
-	".inner-calculator-screen-display"
-);
+class Calculator {
+	constructor() {
+		this.calculatorKeys = document.querySelector(".calculator-keys");
+		this.calculatorScreen = document.querySelector(".calculator-screen");
+		this.innerCalculatorScreen = document.querySelector(
+			".inner-calculator-screen-display"
+		);
+		this.firstOperand = "";
+		this.secondOperand = "";
+		this.currentOperator = null;
+		this.shouldResetScreen = false;
 
-let firstOperand = "";
-let secondOperand = "";
-let currentOperator = null;
-let shouldResetScreen = false;
-
-function appendNumber(number) {
-	if (calculatorScreen.textContent === "0" || shouldResetScreen) resetScreen();
-	calculatorScreen.textContent += number;
-}
-
-function resetScreen() {
-	calculatorScreen.textContent = "";
-	shouldResetScreen = false;
-}
-
-function clearAll() {
-	calculatorScreen.textContent = "0";
-	innerCalculatorScreen.textContent = "";
-	firstOperand = "";
-	secondOperand = "";
-	currentOperator = null;
-}
-
-function handleOperator(operator) {
-	if (currentOperator !== null) calculate();
-	firstOperand = calculatorScreen.textContent;
-	currentOperator = operator;
-	shouldResetScreen = true;
-}
-
-function calculate() {
-	if (currentOperator === null || shouldResetScreen) return;
-	secondOperand = calculatorScreen.textContent;
-	let result;
-
-	switch (currentOperator) {
-		case "+":
-			result = parseFloat(firstOperand) + parseFloat(secondOperand);
-			break;
-		case "-":
-			result = parseFloat(firstOperand) - parseFloat(secondOperand);
-			break;
-		case "*":
-			result = parseFloat(firstOperand) * parseFloat(secondOperand);
-			break;
-		case "/":
-			result = parseFloat(firstOperand) / parseFloat(secondOperand);
-			break;
-		default:
-			return;
+		this.calculatorKeys.addEventListener("click", (e) =>
+			this.handleButtonClick(e)
+		);
 	}
 
-	calculatorScreen.textContent = result;
-	innerCalculatorScreen.textContent = `${firstOperand} ${currentOperator} ${secondOperand} = ${result}`;
-	currentOperator = null;
-	shouldResetScreen = true;
+	appendNumber(number) {
+		if (this.calculatorScreen.textContent === "0" || this.shouldResetScreen)
+			this.resetScreen();
+		this.calculatorScreen.textContent += number;
+	}
+
+	resetScreen() {
+		this.calculatorScreen.textContent = "";
+		this.shouldResetScreen = false;
+	}
+
+	clearAll() {
+		this.calculatorScreen.textContent = "0";
+		this.innerCalculatorScreen.textContent = "";
+		this.firstOperand = "";
+		this.secondOperand = "";
+		this.currentOperator = null;
+	}
+
+	handleOperator(operator) {
+		if (this.currentOperator !== null) this.calculate();
+		this.firstOperand = this.calculatorScreen.textContent;
+		this.currentOperator = operator;
+		this.shouldResetScreen = true;
+	}
+
+	calculate() {
+		if (this.currentOperator === null || this.shouldResetScreen) return;
+		this.secondOperand = this.calculatorScreen.textContent;
+		let result;
+
+		switch (this.currentOperator) {
+			case "+":
+				result = parseFloat(this.firstOperand) + parseFloat(this.secondOperand);
+				break;
+			case "-":
+				result = parseFloat(this.firstOperand) - parseFloat(this.secondOperand);
+				break;
+			case "*":
+				result = parseFloat(this.firstOperand) * parseFloat(this.secondOperand);
+				break;
+			case "/":
+				result = parseFloat(this.firstOperand) / parseFloat(this.secondOperand);
+				break;
+			default:
+				return;
+		}
+
+		this.calculatorScreen.textContent = result;
+		this.innerCalculatorScreen.textContent = `${this.firstOperand} ${this.currentOperator} ${this.secondOperand} = ${result}`;
+		this.currentOperator = null;
+		this.shouldResetScreen = true;
+	}
+
+	handleButtonClick(e) {
+		const target = e.target;
+		const action = target.dataset.action;
+
+		if (!target.matches("button")) return;
+
+		switch (action) {
+			case "number":
+				this.appendNumber(target.textContent);
+				break;
+			case "operator":
+				this.handleOperator(target.textContent);
+				break;
+			case "decimal":
+				if (this.shouldResetScreen) this.resetScreen();
+				if (!this.calculatorScreen.textContent.includes("."))
+					this.calculatorScreen.textContent += ".";
+				break;
+			case "clear":
+				this.clearAll();
+				break;
+			case "calculate":
+				this.calculate();
+				break;
+		}
+	}
 }
 
-calculatorKeys.addEventListener("click", (e) => {
-	const target = e.target;
-	const action = target.dataset.action;
-
-	if (!target.matches("button")) return;
-
-	switch (action) {
-		case "number":
-			appendNumber(target.textContent);
-			break;
-		case "operator":
-			handleOperator(target.textContent);
-			break;
-		case "decimal":
-			if (shouldResetScreen) resetScreen();
-			if (!calculatorScreen.textContent.includes("."))
-				calculatorScreen.textContent += ".";
-			break;
-		case "clear":
-			clearAll();
-			break;
-		case "calculate":
-			calculate();
-			break;
-	}
-});
-
-module.export = { calculate, calculatorKeys };
+const calculator = new Calculator();
+module.exports = Calculator;

@@ -1,16 +1,35 @@
 /** @format */
-const { toggleDarkMode } = require("src/theme");
+global.document.querySelector = jest.fn((selector) => {
+	if (selector === ".theme-toggle") {
+		return { addEventListener: jest.fn() };
+	} else if (selector === ".calculator") {
+		return { classList: { toggle: jest.fn() } };
+	}
+});
+
+beforeAll(() => {
+	global.document.querySelector = jest.fn((selector) => {
+		if (selector === ".theme-toggle") {
+			return { addEventListener: jest.fn() };
+		} else if (selector === ".calculator") {
+			return { classList: { toggle: jest.fn(), contains: jest.fn() } };
+		}
+	});
+});
+
+const { toggleDarkMode } = require("../src/theme");
 
 describe("theme", () => {
 	beforeEach(() => {
 		document.body.innerHTML = '<div id="app"></div>';
 	});
 
-	it("toggles dark-mode class on the body", () => {
-		expect(document.body.classList.contains("dark-mode")).toBe(false);
+	it("toggles dark-mode class on the calculator element", () => {
+		const calculatorElement = document.querySelector(".calculator");
+		expect(calculatorElement.classList.contains("dark-mode")).toBe(false);
 		toggleDarkMode();
-		expect(document.body.classList.contains("dark-mode")).toBe(true);
+		expect(calculatorElement.classList.contains("dark-mode")).toBe(true);
 		toggleDarkMode();
-		expect(document.body.classList.contains("dark-mode")).toBe(false);
+		expect(calculatorElement.classList.contains("dark-mode")).toBe(false);
 	});
 });

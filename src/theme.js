@@ -1,9 +1,12 @@
 /** @format */
+
 const themeToggle = document.querySelector(".theme-toggle");
 
-themeToggle.addEventListener("click", () => {
+function toggleDarkMode() {
 	document.body.classList.toggle("dark");
 	document.querySelector(".calculator").classList.toggle("dark");
-});
+}
+
+themeToggle.addEventListener("click", toggleDarkMode);
 
 module.exports = { toggleDarkMode };

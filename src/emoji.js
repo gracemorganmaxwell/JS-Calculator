@@ -44,4 +44,7 @@ function generateEmojisContinuously() {
 
 generateEmojisContinuously();
 
-module.exports = "generateRandomEmoji";
+module.exports = {
+	generateRandomEmoji,
+	generateEmojisContinuously,
+};
