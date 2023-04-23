@@ -1,97 +1,166 @@
-
-
-body {
-    background-color: #2a2a2a;
-}
+/** @format */
 
 .calculator {
-    margin: auto;
-    margin-top: 100px;
-    width: 300px;
-    height: 400px;
-    background-color: #363636;
-    box-shadow: 0px 4px rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.calculator-screen {
-    width: 100%;
-    height: 25%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-    padding-right: 20px;
-    padding-bottom: 10px;
-    box-sizing: border-box;
-    color: #fff;
-    font-size: 2em;
+	margin: auto;
+	margin-top: 100px;
+	width: 325px;
+	height: 400px;
+	background-color: #1c0404;
+	box-shadow: 0px 4px rgba(61, 51, 51, 0.4);
+	border-radius: 10px;
+	padding-bottom: 2rem;
+	contain: content;
+	overflow: hidden;
 }
 
 .calculator-keys {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 10px;
-    padding: 10px;
-    box-sizing: border-box;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-gap: 10px;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.calculator-screen {
+	width: 100%;
+	height: 25%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-end;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	box-sizing: border-box;
+	color: #f2eee7;
+	font-size: 2em;
+	background-color: #514b4b;
+}
+
+.inner-calculator-screen-display {
+	width: 95%;
+	height: 80%;
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-end;
+	box-sizing: border-box;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 1em;
+	background-color: #0896a9;
+	border-radius: 10px;
+	box-shadow: inset 0px 4px rgba(0, 0, 0, 0.4);
 }
 
 button {
-    width: 100%;
-    height: 50px;
-    background: #f2f2f2;
-    border-radius: 5px;
-    border: none;
-    padding: 0;
-    font-size: 2em;
-    cursor: pointer;
+	width: 100%;
+	height: 50px;
+	background: #43517f;
+	border-radius: 5px;
+	border: none;
+	padding: 0;
+	font-size: 2em;
+	cursor: pointer;
+	box-shadow: inset;
 }
 
 button:hover {
-    transform: translateY(-5px);
-    box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
+	transform: translateY(-5px);
+	box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .operator {
-    color: #fff;
-    background-color: #e74c3c;
+	color: #fff;
+	background-color: #e74c3c;
 }
 
 .equal-sign {
-    color: #fff;
-    background-color: #2ecc71;
-    grid-column: 4 / span 1;
-    grid-row: 5 / span 2;
+	color: #fff;
+	background-color: #2ecc71;
+	grid-column: 4 / span 1;
+	grid-row: 5 / span 2;
 }
 
 .del {
-    color: #fff;
-    background-color: #e67e22;
+	color: #fff;
+	background-color: #e67e22;
 }
 
 button:active {
-    transform: translateY(3px);
-    box-shadow: 1px 1px rgba(0, 0, 0, 0.4);
+	transform: translateY(3px);
+	box-shadow: 1px 1px rgb(0, 0, 0);
 }
 
 button:focus {
-    outline: none;
-}
-
-button:active:focus {
-    outline: none;
+	outline: none;
 }
 
 .calculator-keys .span-two {
-    grid-column: span 2;
+	grid-column: span 2;
 }
 
 .calculator-output {
-    height: 50px;
-    font-size: 2em;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 20px;
+	height: 50px;
+	font-size: 2em;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 20px;
+	contain: content;
+	overflow: hidden;
+}
+
+.theme-toggle {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	font-size: 1.2em;
+	color: #f2f2f2;
+	z-index: 100;
+}
+
+body {
+	background-image: url("../style/img/hd-wallpaper-gcdcd7feb7_1920.jpg");
+}
+
+body.dark,
+.calculator.dark {
+	background-color: #2a2a2a;
+}
+
+.calculator.dark {
+	background-color: #363636;
+}
+
+body.light,
+.calculator.light {
+	background-color: #f2f2f2;
+}
+
+.calculator.light {
+	background-color: #fff;
+}
+#emoji-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.emoji {
+	position: absolute;
+	font-size: 1.5em;
+	opacity: 0.8;
+	animation-name: float;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+@keyframes float {
+	0% {
+		transform: translateY(100%);
+	}
+	100% {
+		transform: translateY(-100%);
+	}
 }

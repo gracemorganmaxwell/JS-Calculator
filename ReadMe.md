@@ -29,3 +29,7 @@ Thank you for using my Calculator project. We hope it helps you with your arithm
 ## Special Thanks To 
 
 Image by <a href="https://pixabay.com/users/felixmittermeier-4397258/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2695569">PayPal.me/FelixMittermeier</a> from <a href="https://pixabay.com//?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2695569">Pixabay</a> 
+
+Royalty free music from https://www.zapsplat.com
+
+<a href=”https://www.zapsplat.com”>Royalty free music from zapsplat.com.</a>
