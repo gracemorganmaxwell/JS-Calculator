@@ -18,6 +18,8 @@ const emojis = [
 ];
 
 function generateRandomEmoji(emojiContainer) {
+	if (!emojiContainer) return;
+
 	const emojiElement = document.createElement("div");
 	const randomEmojiIndex = Math.floor(Math.random() * emojis.length);
 	const randomX = Math.random() * 100;

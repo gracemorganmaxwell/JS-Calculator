@@ -19,11 +19,10 @@ class Calculator {
 
 	appendNumber(number) {
 		if (this.shouldResetScreen || this.calculatorScreen.textContent === "0") {
-			this.calculatorScreen.textContent = number;
+			this.calculatorScreen.textContent = "";
 			this.shouldResetScreen = false;
-		} else {
-			this.calculatorScreen.textContent += number;
 		}
+		this.calculatorScreen.textContent += number;
 	}
 
 	resetScreen() {
@@ -40,57 +39,55 @@ class Calculator {
 	}
 
 	handleOperator(operator) {
+		if (this.shouldResetScreen) return;
 		if (this.currentOperator !== null) {
 			this.calculate();
 		}
-		this.firstOperand = this.calculatorScreen.textContent;
+		this.firstOperand = parseFloat(this.calculatorScreen.textContent);
 		this.currentOperator = operator;
 		this.shouldResetScreen = true;
 	}
 
 	calculate() {
-		if (this.currentOperator === null || this.shouldResetScreen) {
-			return;
-		}
-		this.secondOperand = this.calculatorScreen.textContent;
+		if (this.currentOperator === null || this.shouldResetScreen) return;
+		this.secondOperand = parseFloat(this.calculatorScreen.textContent);
 		let result;
 
 		switch (this.currentOperator) {
 			case "+":
-				result = parseFloat(this.firstOperand) + parseFloat(this.secondOperand);
+				result = this.firstOperand + this.secondOperand;
 				break;
 			case "-":
-				result = parseFloat(this.firstOperand) - parseFloat(this.secondOperand);
+				result = this.firstOperand - this.secondOperand;
 				break;
 			case "*":
-				result = parseFloat(this.firstOperand) * parseFloat(this.secondOperand);
+				result = this.firstOperand * this.secondOperand;
 				break;
 			case "/":
-				result = parseFloat(this.firstOperand) / parseFloat(this.secondOperand);
+				result = this.firstOperand / this.secondOperand;
 				break;
 			default:
 				return;
 		}
 
-		console.log(`firstOperand: ${this.firstOperand}`);
-		console.log(`secondOperand: ${this.secondOperand}`);
-		console.log(`result: ${result}`);
+		if (isNaN(result)) {
+			throw new Error("Result is not a number");
+		}
 
-		this.calculatorScreen.textContent = result;
-		this.innerCalculatorScreen.textContent = `${this.firstOperand} ${this.currentOperator} ${this.secondOperand} = ${result}`;
+		this.calculatorScreen.textContent = result.toFixed(2).replace(/\.?0+$/, "");
+		this.innerCalculatorScreen.textContent = `${this.firstOperand} ${this.currentOperator} ${this.secondOperand} =`;
 		this.currentOperator = null;
 		this.shouldResetScreen = true;
-
-		return result;
 	}
 
 	handleButtonClick(e) {
 		const target = e.target;
-		const action = target.dataset.action;
 
-		if (!target.matches("button")) {
+		if (!target || !target.matches("button")) {
 			return;
 		}
+
+		const action = target.dataset.action;
 
 		switch (action) {
 			case "number":
@@ -113,6 +110,8 @@ class Calculator {
 			case "calculate":
 				this.calculate();
 				break;
+			default:
+				return;
 		}
 	}
 }
