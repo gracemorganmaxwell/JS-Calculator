@@ -1,6 +1,6 @@
 /** @format */
 
-const Calculator = require("./src/calculator.js");
+const Calculator = require("../src/calculator.js");
 
 global.document.querySelector = (selector) => {
 	switch (selector) {

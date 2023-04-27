@@ -44,7 +44,10 @@ describe("generateEmojisContinuously", () => {
 
 		generateEmojisContinuously(mockEmojiContainer);
 		expect(mockEmojiContainer.appendChild).toHaveBeenCalled();
-		jest.runAllTimers();
+
+		// Advance the timers by a specific amount of time (e.g., 5000ms)
+		jest.advanceTimersByTime(5000);
+
 		expect(mockEmojiContainer.removeChild).toHaveBeenCalled();
 
 		jest.useRealTimers();

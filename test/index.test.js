@@ -1,15 +1,13 @@
 /** @format */
 
-import { readFileSync } from "fs";
-import { resolve } from "path";
+const fs = require("fs");
+const path = require("path");
+
+const html = fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf8");
 
 describe("index.html", () => {
-	let indexHtml;
-
 	beforeAll(() => {
-		const indexHtmlPath = resolve(__dirname, "../index.html");
-		indexHtml = readFileSync(indexHtmlPath, "utf-8");
-		document.documentElement.innerHTML = indexHtml.toString();
+		document.documentElement.innerHTML = html.toString();
 	});
 
 	it("contains an emoji container", () => {
