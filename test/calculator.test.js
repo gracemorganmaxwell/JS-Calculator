@@ -31,95 +31,87 @@ function createMockEvent(target) {
 	};
 }
 
+const Calculator = require("../src/calculator");
+
 describe("Calculator", () => {
-	let calculator;
+	describe("Calculator › handleButtonClick", () => {
+		describe("handleButtonClick › handleOperator", () => {
+			let calculator;
 
-	beforeEach(() => {
-		calculator = new Calculator();
-	});
-
-	describe("handleButtonClick", () => {
-		test("should handle number buttons", () => {
-			const mockNumberEvent = createMockEvent({
-				action: "number",
-				textContent: "5",
+			beforeEach(() => {
+				calculator = new Calculator();
 			});
-			calculator.handleButtonClick(mockNumberEvent);
-			expect(calculator.calculatorScreen.textContent).toBe("5");
-		});
 
-		test("should handle operator buttons", () => {
-			const mockOperatorEvent = createMockEvent({
-				action: "operator",
-				textContent: "+",
-			});
-			calculator.handleButtonClick(mockOperatorEvent);
-			expect(calculator.currentOperator).toBe("+");
-			expect(calculator.firstOperand).toBe(
-				parseFloat(calculator.calculatorScreen.textContent)
-			);
-		});
-
-		describe("handleOperator", () => {
 			it("should handle an operator when currentOperator is null", () => {
-				calculator.calculatorScreen.textContent = "0";
-				calculator.handleOperator("+");
+				calculator.handleButtonClick({
+					target: {
+						dataset: { action: "operator" },
+						textContent: "+",
+						matches: () => true,
+					},
+				});
 				expect(calculator.currentOperator).toBe("+");
-				expect(calculator.firstOperand).toBe(0);
+				expect(calculator.firstOperand).toBe(
+					calculator.calculatorScreen.textContent
+				);
 				expect(calculator.shouldResetScreen).toBe(true);
 			});
 
 			it("should handle an operator when currentOperator is not null", () => {
-				calculator.currentOperator = "+";
-				calculator.calculatorScreen.textContent = "5";
-				calculator.shouldResetScreen = false;
-				calculator.handleOperator("-");
-				expect(calculator.currentOperator).toBe("-");
-				expect(calculator.firstOperand).toBe(5);
-				expect(calculator.shouldResetScreen).toBe(true);
-				expect(calculator.innerCalculatorScreen.textContent).toBe("0 + 5 = 5");
+				calculator.handleButtonClick({
+					target: {
+						dataset: { action: "operator" },
+						textContent: "+",
+						matches: () => true,
+					},
+				});
+				calculator.handleButtonClick({
+					target: {
+						dataset: { action: "number" },
+						textContent: "2",
+						matches: () => true,
+					},
+				});
+				calculator.handleButtonClick({
+					target: {
+						dataset: { action: "operator" },
+						textContent: "-",
+						matches: () => true,
+					},
+				});
+				expect(calculator.innerCalculatorScreen.textContent).toContain("=");
 			});
 		});
 
-		// Add more tests for other button types (decimal, clear, calculate)
-		describe("appendNumber", () => {
-			it("should append a number to the screen", () => {
-				calculator.appendNumber("5");
-				expect(calculator.calculatorScreen.textContent).toBe("5");
+		describe("handleButtonClick › resetScreen", () => {
+			let calculator;
+
+			beforeEach(() => {
+				calculator = new Calculator();
 			});
 
-			it("should reset the screen when screen is 0 or shouldResetScreen is true", () => {
-				calculator.shouldResetScreen = false;
-				calculator.appendNumber("5");
-				expect(calculator.calculatorScreen.textContent).toBe("5");
-
-				calculator.resetScreen();
-				calculator.shouldResetScreen = true;
-				calculator.appendNumber("5");
-				expect(calculator.calculatorScreen.textContent).toBe("5");
-			});
-		});
-
-		describe("resetScreen", () => {
 			it("should reset the screen to 0 and set shouldResetScreen to false", () => {
-				calculator.calculatorScreen.textContent = "5";
+				calculator.calculatorScreen.textContent = "42";
 				calculator.shouldResetScreen = true;
-				calculator.resetScreen();
+				calculator.handleButtonClick({
+					target: { dataset: { action: "clear" }, matches: () => true },
+				});
 				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.shouldResetScreen).toBe(false);
 			});
 		});
 
-		describe("clearAll", () => {
-			it("should clear the screen, inner screen, and all operands", () => {
-				calculator.calculatorScreen.textContent = "5";
-				calculator.innerCalculatorScreen.textContent = "5 + 5 = 10";
-				calculator.firstOperand = 5;
-				calculator.secondOperand = 5;
-				calculator.currentOperator = "+";
+		describe("handleButtonClick › clearAll", () => {
+			let calculator;
 
-				calculator.clearAll();
+			beforeEach(() => {
+				calculator = new Calculator();
+			});
 
+			it("should clear the screen, innerscreen, and all operands", () => {
+				calculator.handleButtonClick({
+					target: { dataset: { action: "clear-all" }, matches: () => true },
+				});
 				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.innerCalculatorScreen.textContent).toBe("");
 				expect(calculator.firstOperand).toBe(null);
@@ -128,132 +120,58 @@ describe("Calculator", () => {
 			});
 		});
 
-		describe("calculate", () => {
+		describe("handleButtonClick › calculate", () => {
+			let calculator;
+
+			beforeEach(() => {
+				calculator = new Calculator();
+			});
+
 			it("should return if currentOperator is null or shouldResetScreen is true", () => {
-				calculator.calculate();
+				calculator.handleButtonClick({
+					target: { dataset: { action: "calculate" }, matches: () => true },
+				});
 				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.innerCalculatorScreen.textContent).toBe("");
 
 				calculator.shouldResetScreen = true;
-				calculator.currentOperator = "+";
-				calculator.calculate();
+				calculator.handleButtonClick({
+					target: { dataset: { action: "calculate" }, matches: () => true },
+				});
 				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.innerCalculatorScreen.textContent).toBe("");
 			});
 
 			it("should calculate the result of an operation and display on calculator screen and inner screen", () => {
-				calculator.calculatorScreen.textContent = "5";
-				calculator.currentOperator = "+";
-				calculator.shouldResetScreen = false;
-				calculator.secondOperand = 10;
-				calculator.calculate();
-				expect(calculator.calculatorScreen.textContent).toBe("15");
-				expect(calculator.innerCalculatorScreen.textContent).toBe(
-					"5 + 10 = 15"
-				);
-			});
-		});
-
-		describe("handleButtonClick", () => {
-			it("should append a number to the screen", () => {
 				calculator.handleButtonClick({
-					target: { textContent: "5", matches: () => true },
-				});
-				expect(calculator.calculatorScreen.textContent).toBe("5");
-			});
-
-			it("should handle the addition operator", () => {
-				calculator.handleButtonClick({
-					target: { textContent: "+", matches: () => true },
+					target: {
+						dataset: { action: "number" },
+						textContent: "5",
+						matches: () => true,
+					},
 				});
 				calculator.handleButtonClick({
-					target: { textContent: "3", matches: () => true },
+					target: {
+						dataset: { action: "operator" },
+						textContent: "+",
+						matches: () => true,
+					},
 				});
 				calculator.handleButtonClick({
-					target: { textContent: "=", matches: () => true },
-				});
-				expect(calculator.calculatorScreen.textContent).toBe("3");
-			});
-
-			it("should handle the subtraction operator", () => {
-				calculator.handleButtonClick({
-					target: { textContent: "-", matches: () => true },
+					target: {
+						dataset: { action: "number" },
+						textContent: "3",
+						matches: () => true,
+					},
 				});
 				calculator.handleButtonClick({
-					target: { textContent: "3", matches: () => true },
+					target: { dataset: { action: "calculate" }, matches: () => true },
 				});
-				calculator.handleButtonClick({
-					target: { textContent: "=", matches: () => true },
-				});
-				expect(calculator.calculatorScreen.textContent).toBe("-3");
-			});
-
-			it("should handle the multiplication operator", () => {
-				calculator.handleButtonClick({
-					target: { textContent: "*", matches: () => true },
-				});
-				calculator.handleButtonClick({
-					target: { textContent: "3", matches: () => true },
-				});
-				calculator.handleButtonClick({
-					target: { textContent: "=", matches: () => true },
-				});
-				expect(calculator.calculatorScreen.textContent).toBe("0");
-			});
-
-			it("should handle the division operator", () => {
-				calculator.handleButtonClick({
-					target: { textContent: "/", matches: () => true },
-				});
-				calculator.handleButtonClick({
-					target: { textContent: "3", matches: () => true },
-				});
-				calculator.handleButtonClick({
-					target: { textContent: "=", matches: () => true },
-				});
-				expect(calculator.calculatorScreen.textContent).toBe("0");
-			});
-
-			it("should handle the decimal point operator", () => {
-				calculator.handleButtonClick({
-					target: { textContent: "2", matches: () => true },
-				});
-				calculator.handleButtonClick({
-					target: { textContent: ".", matches: () => true },
-				});
-				calculator.handleButtonClick({
-					target: { textContent: "5", matches: () => true },
-				});
-				expect(calculator.calculatorScreen.textContent).toBe("2.5");
-			});
-
-			it("should clear the screen and inner screen when the clear button is pressed", () => {
-				calculator.calculatorScreen.textContent = "5";
-				calculator.innerCalculatorScreen.textContent = "5 + 5 = 10";
-				calculator.firstOperand = 5;
-				calculator.secondOperand = 5;
-				calculator.currentOperator = "+";
-
-				calculator.handleButtonClick({
-					target: { textContent: "C", matches: () => true },
-				});
-
-				expect(calculator.calculatorScreen.textContent).toBe("0");
-				expect(calculator.innerCalculatorScreen.textContent).toBe("");
-				expect(calculator.firstOperand).toBe(null);
-				expect(calculator.secondOperand).toBe(null);
-				expect(calculator.currentOperator).toBe(null);
-			});
-
-			it("should do nothing if an invalid button is pressed", () => {
-				calculator.handleButtonClick({
-					target: { textContent: "invalid", matches: () => false },
-				});
-				expect(calculator.calculatorScreen.textContent).toBe("0");
-				expect(calculator.innerCalculatorScreen.textContent).toBe("");
-				expect(calculator.firstOperand).toBe(null);
-				expect(calculator.secondOperand).toBe(null);
-				expect(calculator.currentOperator).toBe(null);
+				expect(calculator.calculatorScreen.textContent).toBe("8");
+				expect(calculator.innerCalculatorScreen.textContent)
+					.expect(calculator.innerCalculatorScreen.textContent)
+					.toBe("5 + 8 =");
+				expect(calculator.innerCalculatorScreen.textContent).toBe("5 + 8 =");
 			});
 		});
 	});

@@ -1,89 +1,90 @@
+/** @format */
+
 class Calculator {
 	constructor() {
-		this.calculatorKeys = document.querySelector(".calculator-keys");
-		this.calculatorScreen = document.querySelector(".calculator-screen");
-		this.innerCalculatorScreen = document.querySelector(
-			".inner-calculator-screen-display"
-		);
-		this.firstOperand = "";
-		this.secondOperand = "";
+		this.firstOperand = null;
+		this.secondOperand = null;
 		this.currentOperator = null;
 		this.shouldResetScreen = false;
-
-		this.calculatorKeys.addEventListener("click", (e) =>
-			this.handleButtonClick(e)
+		this.calculatorScreen = document.querySelector(".calculator-screen");
+		this.innerCalculatorScreen = document.querySelector(
+			".inner-calculator-screen"
 		);
 	}
 
 	appendNumber(number) {
-		if (this.shouldResetScreen || this.calculatorScreen.textContent === "0") {
+		if (this.shouldResetScreen) {
 			this.calculatorScreen.textContent = "";
 			this.shouldResetScreen = false;
 		}
 		this.calculatorScreen.textContent += number;
 	}
 
-	resetScreen() {
-		this.calculatorScreen.textContent = "";
-		this.shouldResetScreen = false;
-	}
-
-	clearAll() {
-		this.calculatorScreen.textContent = "0";
-		this.innerCalculatorScreen.textContent = "";
-		this.firstOperand = "";
-		this.secondOperand = "";
-		this.currentOperator = null;
+	appendDecimal() {
+		if (this.shouldResetScreen) {
+			this.calculatorScreen.textContent = "0";
+			this.shouldResetScreen = false;
+		}
+		if (!this.calculatorScreen.textContent.includes(".")) {
+			this.calculatorScreen.textContent += ".";
+		}
 	}
 
 	handleOperator(operator) {
-		if (this.shouldResetScreen) return;
-		if (this.currentOperator !== null) {
-			this.calculate();
-		}
-		this.firstOperand = parseFloat(this.calculatorScreen.textContent);
+		if (this.currentOperator !== null) this.calculate();
+		this.firstOperand = this.calculatorScreen.textContent;
 		this.currentOperator = operator;
 		this.shouldResetScreen = true;
 	}
 
 	calculate() {
 		if (this.currentOperator === null || this.shouldResetScreen) return;
-		this.secondOperand = parseFloat(this.calculatorScreen.textContent);
+
 		let result;
+		const firstOperand = parseFloat(this.firstOperand);
+		const secondOperand = parseFloat(this.calculatorScreen.textContent);
 
 		switch (this.currentOperator) {
 			case "+":
-				result = this.firstOperand + this.secondOperand;
+				result = firstOperand + secondOperand;
 				break;
 			case "-":
-				result = this.firstOperand - this.secondOperand;
+				result = firstOperand - secondOperand;
 				break;
 			case "*":
-				result = this.firstOperand * this.secondOperand;
+				result = firstOperand * secondOperand;
 				break;
 			case "/":
-				result = this.firstOperand / this.secondOperand;
+				result = firstOperand / secondOperand;
 				break;
 			default:
 				return;
 		}
 
-		if (isNaN(result)) {
-			throw new Error("Result is not a number");
-		}
-
-		this.calculatorScreen.textContent = result.toFixed(2).replace(/\.?0+$/, "");
-		this.innerCalculatorScreen.textContent = `${this.firstOperand} ${this.currentOperator} ${this.secondOperand} =`;
+		this.calculatorScreen.textContent = parseFloat(
+			result.toFixed(2)
+		).toString();
+		this.innerCalculatorScreen.textContent = `${this.firstOperand} ${this.currentOperator} ${this.calculatorScreen.textContent} =`;
 		this.currentOperator = null;
 		this.shouldResetScreen = true;
 	}
 
-	handleButtonClick(e) {
-		const target = e.target;
+	resetScreen() {
+		this.calculatorScreen.textContent = "0";
+		this.shouldResetScreen = false;
+	}
 
-		if (!target || !target.matches("button")) {
-			return;
-		}
+	clearAll() {
+		this.calculatorScreen.textContent = "0";
+		this.innerCalculatorScreen.textContent = "";
+		this.firstOperand = null;
+		this.secondOperand = null;
+		this.currentOperator = null;
+	}
+
+	handleButtonClick(event) {
+		const target = event.target;
+		if (!target.matches("button")) return;
 
 		const action = target.dataset.action;
 
@@ -95,18 +96,13 @@ class Calculator {
 				this.handleOperator(target.textContent);
 				break;
 			case "decimal":
-				if (this.shouldResetScreen) {
-					this.resetScreen();
-				}
-				if (!this.calculatorScreen.textContent.includes(".")) {
-					this.calculatorScreen.textContent += ".";
-				}
+				this.appendDecimal();
 				break;
 			case "clear":
-				this.clearAll();
+				this.resetScreen();
 				break;
-			case "calculate":
-				this.calculate();
+			case "clear-all":
+				this.clearAll();
 				break;
 			default:
 				return;
@@ -114,7 +110,7 @@ class Calculator {
 	}
 }
 
-module.exports = Calculator;
-
-
-
+const calculator = new Calculator();
+document
+	.querySelector(".calculator")
+	.addEventListener("click", (event) => calculator.handleButtonClick(event));
