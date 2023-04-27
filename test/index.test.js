@@ -1,14 +1,14 @@
 /** @format */
 
-const fs = require("fs");
-const path = require("path");
+import { readFileSync } from "fs";
+import { resolve } from "path";
 
 describe("index.html", () => {
 	let indexHtml;
 
 	beforeAll(() => {
-		const indexHtmlPath = path.resolve(__dirname, "../index.html");
-		indexHtml = fs.readFileSync(indexHtmlPath, "utf-8");
+		const indexHtmlPath = resolve(__dirname, "../index.html");
+		indexHtml = readFileSync(indexHtmlPath, "utf-8");
 		document.documentElement.innerHTML = indexHtml.toString();
 	});
 

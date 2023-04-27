@@ -1,5 +1,3 @@
-/** @format */
-
 class Calculator {
 	constructor() {
 		this.calculatorKeys = document.querySelector(".calculator-keys");
@@ -117,3 +115,6 @@ class Calculator {
 }
 
 module.exports = Calculator;
+
+
+

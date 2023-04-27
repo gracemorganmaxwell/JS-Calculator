@@ -50,7 +50,4 @@ document.addEventListener("DOMContentLoaded", () => {
 	generateEmojisContinuously(emojiContainer);
 });
 
-module.exports = {
-	generateRandomEmoji,
-	generateEmojisContinuously,
-};
+module.exports = { generateRandomEmoji, generateEmojisContinuously };

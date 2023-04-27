@@ -1,4 +1,7 @@
 /** @format */
+
+const Calculator = require("./src/calculator.js");
+
 global.document.querySelector = (selector) => {
 	switch (selector) {
 		case ".calculator-screen":
@@ -15,8 +18,6 @@ global.document.querySelector = (selector) => {
 			};
 	}
 };
-
-const Calculator = require("../src/Calculator");
 
 function createMockEvent(target) {
 	return {

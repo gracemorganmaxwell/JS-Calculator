@@ -1,45 +1,44 @@
 /** @format */
 
-// ... (other imports)
 const {
 	generateRandomEmoji,
 	generateEmojisContinuously,
-} = require("../src/emoji");
+} = require("../src/emoji.js");
 
-// Create a mock emojiContainer
 const mockEmojiContainer = {
 	appendChild: jest.fn(),
 	removeChild: jest.fn(),
 };
 
-describe("generateRandomEmoji", () => {
-	// ... (other tests)
+const emojis = [
+	"🚀",
+	"🌠",
+	"🌌",
+	"🌕",
+	"🌖",
+	"🌗",
+	"🌘",
+	"🌑",
+	"🌒",
+	"🌓",
+	"🌔",
+	"🌟",
+	"⭐",
+	"☄️",
+];
 
+describe("generateRandomEmoji", () => {
 	test("returns a valid emoji", () => {
-		const emojis = [
-			"🚀",
-			"🌠",
-			"🌌",
-			"🌕",
-			"🌖",
-			"🌗",
-			"🌘",
-			"🌑",
-			"🌒",
-			"🌓",
-			"🌔",
-			"🌟",
-			"⭐",
-			"☄️",
-		];
-		const emoji = generateRandomEmoji(mockEmojiContainer);
+		generateRandomEmoji(mockEmojiContainer);
+
+		const emojiElement = mockEmojiContainer.appendChild.mock.calls[0][0];
+		const emoji = emojiElement.textContent;
+
 		expect(emojis).toContain(emoji);
 	});
 });
 
 describe("generateEmojisContinuously", () => {
-	// ... (other tests)
-
 	test("creates and removes emoji elements", () => {
 		jest.useFakeTimers();
 
