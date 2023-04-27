@@ -65,7 +65,7 @@ describe("Calculator", () => {
 				calculator.calculatorScreen.textContent = "0";
 				calculator.handleOperator("+");
 				expect(calculator.currentOperator).toBe("+");
-				expect(calculator.firstOperand).toBe("0");
+				expect(calculator.firstOperand).toBe(0);
 				expect(calculator.shouldResetScreen).toBe(true);
 			});
 
@@ -75,7 +75,7 @@ describe("Calculator", () => {
 				calculator.shouldResetScreen = false;
 				calculator.handleOperator("-");
 				expect(calculator.currentOperator).toBe("-");
-				expect(calculator.firstOperand).toBe("5");
+				expect(calculator.firstOperand).toBe(5);
 				expect(calculator.shouldResetScreen).toBe(true);
 				expect(calculator.innerCalculatorScreen.textContent).toBe("0 + 5 = 5");
 			});
@@ -101,11 +101,11 @@ describe("Calculator", () => {
 		});
 
 		describe("resetScreen", () => {
-			it("should reset the screen to an empty string and set shouldResetScreen to false", () => {
+			it("should reset the screen to 0 and set shouldResetScreen to false", () => {
 				calculator.calculatorScreen.textContent = "5";
 				calculator.shouldResetScreen = true;
 				calculator.resetScreen();
-				expect(calculator.calculatorScreen.textContent).toBe("");
+				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.shouldResetScreen).toBe(false);
 			});
 		});
@@ -114,16 +114,16 @@ describe("Calculator", () => {
 			it("should clear the screen, inner screen, and all operands", () => {
 				calculator.calculatorScreen.textContent = "5";
 				calculator.innerCalculatorScreen.textContent = "5 + 5 = 10";
-				calculator.firstOperand = "5";
-				calculator.secondOperand = "5";
+				calculator.firstOperand = 5;
+				calculator.secondOperand = 5;
 				calculator.currentOperator = "+";
 
 				calculator.clearAll();
 
 				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.innerCalculatorScreen.textContent).toBe("");
-				expect(calculator.firstOperand).toBe("");
-				expect(calculator.secondOperand).toBe("");
+				expect(calculator.firstOperand).toBe(null);
+				expect(calculator.secondOperand).toBe(null);
 				expect(calculator.currentOperator).toBe(null);
 			});
 		});
@@ -145,7 +145,7 @@ describe("Calculator", () => {
 				calculator.calculatorScreen.textContent = "5";
 				calculator.currentOperator = "+";
 				calculator.shouldResetScreen = false;
-				calculator.secondOperand = "10";
+				calculator.secondOperand = 10;
 				calculator.calculate();
 				expect(calculator.calculatorScreen.textContent).toBe("15");
 				expect(calculator.innerCalculatorScreen.textContent).toBe(
@@ -230,8 +230,8 @@ describe("Calculator", () => {
 			it("should clear the screen and inner screen when the clear button is pressed", () => {
 				calculator.calculatorScreen.textContent = "5";
 				calculator.innerCalculatorScreen.textContent = "5 + 5 = 10";
-				calculator.firstOperand = "5";
-				calculator.secondOperand = "5";
+				calculator.firstOperand = 5;
+				calculator.secondOperand = 5;
 				calculator.currentOperator = "+";
 
 				calculator.handleButtonClick({
@@ -240,8 +240,8 @@ describe("Calculator", () => {
 
 				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.innerCalculatorScreen.textContent).toBe("");
-				expect(calculator.firstOperand).toBe("");
-				expect(calculator.secondOperand).toBe("");
+				expect(calculator.firstOperand).toBe(null);
+				expect(calculator.secondOperand).toBe(null);
 				expect(calculator.currentOperator).toBe(null);
 			});
 
@@ -251,8 +251,8 @@ describe("Calculator", () => {
 				});
 				expect(calculator.calculatorScreen.textContent).toBe("0");
 				expect(calculator.innerCalculatorScreen.textContent).toBe("");
-				expect(calculator.firstOperand).toBe("");
-				expect(calculator.secondOperand).toBe("");
+				expect(calculator.firstOperand).toBe(null);
+				expect(calculator.secondOperand).toBe(null);
 				expect(calculator.currentOperator).toBe(null);
 			});
 		});
